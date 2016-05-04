@@ -24,20 +24,36 @@ router.post('/add', function (req, res, next) {
     var tempUser = req.body;
     var personalNo = tempUser.personalNo;
 
-    var tempISBN = tempBook.isbn;
     if (!checkUser(personalNo)) {
         res.writeHead(400, "User already exists", {'content-type': 'application/json'});
         res.end("User already exists");
         return;
     }
 
-    books.push(tempBook);
-    res.send(books);
+    users.push(tempUser);
+    res.send(users);
+});
+
+router.post('/auth', function (req, res, next) {
+    var username = req.body.username;
+    var password = req.body.password;
+
+
+    for(var i = 0; i < users.length; i++){
+        if(users[i].username == username && users[i].password == password){
+            res.send(users[i]);
+            console.log("adsa")
+            return;
+        }
+    }
+
+    res.writeHead(400, "Invalid username or password", {'content-type': 'application/json'});
+    res.end("Invalid username or password");
 });
 
 function checkUser(tempPersonalNo) {
     var result = true;
-    books.forEach(function (item) {
+    users.forEach(function (item) {
         if (item.personalNo == tempPersonalNo) {
             result = false;
         }
