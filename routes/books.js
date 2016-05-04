@@ -59,12 +59,14 @@ router.post('/addRating', function (req, res, next) {
     var book = getBookByISBN(isbn);
 
     if(grade < 0 || grade > 10){
-        res.send("ILLEGAL GRADE");
+        res.writeHead(400, "ILLEGAL GRADE", {'content-type' : 'application/json'});
+        res.end("ILLEGAL GRADE");
         return;
     }
 
     if(book == null){
-        res.send("ILLEGAL BOOK");
+        res.writeHead(400, "ILLEGAL BOOK", {'content-type' : 'application/json'});
+        res.end("ILLEGAL BOOK");
         return;
     }
 
