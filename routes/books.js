@@ -4,39 +4,46 @@
 var express = require('express');
 var router = express.Router();
 
+var Book = require('../models/Book');
+
 /*Constructor Of Book*/
-function Book(title, author, isbn, year, comment, room, shelf, quantity, taken) {
-    this.title = title;
-    this.author = author;
-    this.isbn = isbn;
-    this.year = year;
-    this.comment = comment;
-    this.room = room;
-    this.shelf = shelf;
-    this.rating = [];
-    this.currRating = 0;
-    this.quantity = quantity;
-    this.taken = taken;
-}
+/*function Book(title, author, isbn, year, comment, room, shelf, quantity, taken) {
+ this.title = title;
+ this.author = author;
+ this.isbn = isbn;
+ this.year = year;
+ this.comment = comment;
+ this.room = room;
+ this.shelf = shelf;
+ this.rating = [];
+ this.currRating = 0;
+ this.quantity = quantity;
+ this.taken = taken;
+ }
 
-var books = [];
-var nodeByExamples = new Book('Node.js By Example', 'Krasimir Tsonev', '978-1-78439-571-1', 2015, '', 1, 1, 10, 0);
-var spring = new Book('Spring In Action 4th', 'Craig Walls', '9781617291203', 2015, '', 1, 2, 10, 0);
-var beginningNodeJs = new Book('Beginning Node.Js', 'Basarat Ali Syed', 2015, '', '', 1, 3, 10, 0);
+ var books = [];
+ var nodeByExamples = new Book('Node.js By Example', 'Krasimir Tsonev', '978-1-78439-571-1', 2015, '', 1, 1, 10, 0);
+ var spring = new Book('Spring In Action 4th', 'Craig Walls', '9781617291203', 2015, '', 1, 2, 10, 0);
+ var beginningNodeJs = new Book('Beginning Node.Js', 'Basarat Ali Syed', 2015, '', '', 1, 3, 10, 0);
 
-books.push(nodeByExamples, spring, beginningNodeJs);
-
+ books.push(nodeByExamples, spring, beginningNodeJs);
+ */
 
 /* GET users listing. */
-router.get('/list', function (req, res, next) {
-    res.send(books);
-});
+function getBooks(req, res, next) {
+    Book.find({}, function (err, books) {
+        if (err) return next(err);
+        res.send(books);
+    });
+}
+router.get('/list', getBooks);
 
 
 router.post('/add', function (req, res, next) {
     var tempBook = req.body;
     var tempRoom = tempBook.room;
     var tempShelf = tempBook.shelf;
+    var tempISBN = tempBook.isbn;
     var quantity = tempBook.quantity;
     tempBook.taken = 0;
 
@@ -46,90 +53,125 @@ router.post('/add', function (req, res, next) {
         return;
     }
 
-    if (!checkPlace(tempRoom, tempShelf)) {
-        res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
-        res.end("Place Is Not Available");
-        return;
-    }
+    Book.find({
+        isbn: tempISBN
+    }, function (err, books) {
+        if (books.length) {
+            res.writeHead(400, "ISBN IS NOT UNIQUE", {'content-type': 'application/json'});
+            res.end("ISBN IS NOT UNIQUE");
+            console.log("shevida isbnshi");
+        } else {
+            Book.find({
+                shelf: tempShelf,
+                room: tempRoom
+            }, function (err, books) {
+                if (books.length) {
+                    res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
+                    res.end("Place Is Not Available");
+                } else {
+                    Book.create(tempBook, function (err) {
+                        if (err) return next(err);
+                    });
 
-    var tempISBN = tempBook.isbn;
-    if (!checkISBN(tempISBN)) {
-        res.writeHead(400, "ISBN IS NOT UNIQUE", {'content-type': 'application/json'});
-        res.end("ISBN IS NOT UNIQUE");
-        return;
-    }
-
-    books.push(tempBook);
-    res.send(books);
+                    getBooks(req, res, next);
+                }
+            });
+        }
+    });
 });
 
 
 router.post('/addRating', function (req, res, next) {
-    var isbn = req.body.book.isbn;
+    var tempISBN = req.body.book.isbn;
     var grade = req.body.grade;
-
-    var book = getBookByISBN(isbn);
 
     if (grade < 0 || grade > 10) {
         res.writeHead(400, "ILLEGAL GRADE", {'content-type': 'application/json'});
         res.end("ILLEGAL GRADE");
         return;
+    } else {
+        Book.findOne({
+            isbn: tempISBN
+        }, function (err, book) {
+            if (err) return new Error("Error occuered");
+
+            rating = book.rating;
+            rating.push(grade);
+            var currRating = 0;
+            var sum = 0;
+            for (var i = 0; i < rating.length; i++) {
+                sum += rating[i];
+            }
+            currRating = sum / rating.length;
+            book.currRating = currRating;
+
+            Book.update(book, function (error, book) {
+                if (error) return next(error);
+
+                res.send(book);
+            });
+        })
     }
 
-    if (book == null) {
-        res.writeHead(400, "ILLEGAL BOOK", {'content-type': 'application/json'});
-        res.end("ILLEGAL BOOK");
-        return;
-    }
+    /*
+     Book.find({
+     isbn: isbn
+     }, function (err, books) {
+     if (books.length) {
+     for (var i = 0; i < books.length; i++) {
+     rating = books[i].rating;
+     rating.push(grade);
+     var currRating = 0;
+     var sum = 0;
+     for (var j = 0; j < rating.length; j++) {
+     sum += rating[i];
+     }
+     currRating = sum / rating.length;
+     books[i].currRating = currRating;
+     }
 
-    rating = book.rating;
-    rating.push(grade);
-    var currRating = 0;
-    var sum = 0;
-    for (var i = 0; i < rating.length; i++) {
-        sum += rating[i];
-    }
-    currRating = sum / rating.length;
-    book.currRating = currRating;
+     books.save(function (err) {
+     if (err)
+     console.log('error')
+     else
+     console.log('success')
+     });
+     } else {
+     res.writeHead(400, "ILLEGAL ISBN", {'content-type': 'application/json'});
+     res.end("ILLEGAL ISBN");
+     }
+     });
+     */
 
-    res.send(books);
+    /*
+     var book = getBookByISBN(isbn);
+
+     if (grade < 0 || grade > 10) {
+     res.writeHead(400, "ILLEGAL GRADE", {'content-type': 'application/json'});
+     res.end("ILLEGAL GRADE");
+     return;
+     }
+
+     if (book == null) {
+     res.writeHead(400, "ILLEGAL BOOK", {'content-type': 'application/json'});
+     res.end("ILLEGAL BOOK");
+     return;
+     }
+
+     rating = book.rating;
+     rating.push(grade);
+     var currRating = 0;
+     var sum = 0;
+     for (var i = 0; i < rating.length; i++) {
+     sum += rating[i];
+     }
+     currRating = sum / rating.length;
+     book.currRating = currRating;
+
+     res.send(books);
+
+     */
 });
-
-
-function checkPlace(tempRoom, tempShelf) {
-
-    var result = true;
-    books.forEach(function (item) {
-        if (item.room == tempRoom && item.shelf == tempShelf) {
-            result = false;
-        }
-    });
-
-    return result;
-}
-
-function checkISBN(tempISBN) {
-
-    var result = true;
-    books.forEach(function (item) {
-        if (item.isbn == tempISBN) {
-            result = false;
-        }
-    });
-
-    return result;
-}
-
-function getBookByISBN(tempISBN) {
-
-    for (var i = 0; i < books.length; i++) {
-        if (books[i].isbn == tempISBN) {
-            return books[i];
-        }
-    }
-
-    return null;
-}
 
 
 module.exports = router;
