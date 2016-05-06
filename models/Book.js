@@ -1,9 +1,8 @@
 /**
  * Created by Giga on 5/5/2016.
  */
-var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/lms');
+var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
     title: String,

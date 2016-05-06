@@ -6,36 +6,15 @@ var router = express.Router();
 
 var Book = require('../models/Book');
 
-/*Constructor Of Book*/
-/*function Book(title, author, isbn, year, comment, room, shelf, quantity, taken) {
- this.title = title;
- this.author = author;
- this.isbn = isbn;
- this.year = year;
- this.comment = comment;
- this.room = room;
- this.shelf = shelf;
- this.rating = [];
- this.currRating = 0;
- this.quantity = quantity;
- this.taken = taken;
- }
 
- var books = [];
- var nodeByExamples = new Book('Node.js By Example', 'Krasimir Tsonev', '978-1-78439-571-1', 2015, '', 1, 1, 10, 0);
- var spring = new Book('Spring In Action 4th', 'Craig Walls', '9781617291203', 2015, '', 1, 2, 10, 0);
- var beginningNodeJs = new Book('Beginning Node.Js', 'Basarat Ali Syed', 2015, '', '', 1, 3, 10, 0);
 
- books.push(nodeByExamples, spring, beginningNodeJs);
- */
-
-/* GET users listing. */
 function getBooks(req, res, next) {
     Book.find({}, function (err, books) {
         if (err) return next(err);
         res.send(books);
     });
 }
+
 router.get('/list', getBooks);
 
 
@@ -175,3 +154,4 @@ router.post('/addRating', function (req, res, next) {
 
 
 module.exports = router;
+
