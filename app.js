@@ -5,11 +5,20 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Connection create
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/lms');
+
+// Import models
+require('./models/ModelsImporter');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var books = require('./routes/books');
 
 var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

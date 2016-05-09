@@ -1,66 +1,67 @@
 var express = require('express');
 var router = express.Router();
 
-function User(name, surname, personalNo, phone, mail, address, username, password) {
-    this.name = name;
-    this.surname = surname;
-    this.personalNo = personalNo;
-    this.phone = phone;
-    this.mail = mail;
-    this.address = address;
-    this.username = username;
-    this.password = password;
+var User = require('../models/User');
+
+function getUsers(req, res, next) {
+    User.find({}, function (err, users) {
+        if (err) return next(err);
+        res.send(users);
+    });
 }
 
-var users = [];
-var chalauri = new User("Giga", "Chalauri", "01234567891", "591115008", "giga.chalauri@gmail.com", "Unknown", "chalauri", "chalauri");
-users.push(chalauri);
-
-router.get('/list', function (req, res, next) {
-    res.send(users);
-});
+router.get('/list', getUsers);
 
 router.post('/add', function (req, res, next) {
     var tempUser = req.body;
-    var personalNo = tempUser.personalNo;
+    var tempPersonalNo = tempUser.personalNo;
+    var tempUsername = tempUser.username;
 
-    if (!checkUser(personalNo)) {
-        res.writeHead(400, "User already exists", {'content-type': 'application/json'});
-        res.end("User already exists");
-        return;
-    }
+    User.find({
+        personalNo: tempPersonalNo
+    }, function (err, users) {
+        if (users.length) {
+            res.writeHead(400, "USER IS ALREADY REGISTERED", {'content-type': 'application/json'});
+            res.end("USER IS ALREADY REGISTERED");
+        } else {
 
-    users.push(tempUser);
-    res.send(users);
+            User.find({
+               username :  tempUsername
+            },function (err, users) {
+                if (users.length) {
+                    res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
+                    res.end("USERNAME IS ALREADY USED");
+                }else{
+                    User.create(tempUser, function (err) {
+                        if (err) return next(err);
+                    });
+
+                    getUsers(req, res, next);
+                }
+            });
+
+        }
+    });
 });
 
 router.post('/auth', function (req, res, next) {
-    var username = req.body.username;
-    var password = req.body.password;
+    var tempUsername = req.body.username;
+    var tempPassword = req.body.password;
 
 
-    for(var i = 0; i < users.length; i++){
-        if(users[i].username == username && users[i].password == password){
-            res.send(users[i]);
-            console.log("adsa")
-            return;
-        }
-    }
-
-    res.writeHead(400, "Invalid username or password", {'content-type': 'application/json'});
-    res.end("Invalid username or password");
-});
-
-function checkUser(tempPersonalNo) {
-    var result = true;
-    users.forEach(function (item) {
-        if (item.personalNo == tempPersonalNo) {
-            result = false;
+    User.findOne({
+        username: tempUsername,
+        password: tempPassword
+    }, function (err, user) {
+        if (!user) {
+            res.writeHead(400, "ILLEGAL USERNAME OR PASSWORD", {'content-type': 'application/json'});
+            res.end("ILLEGAL USERNAME OR PASSWORD");
+        } else {
+            res.send(user);
         }
     });
 
-    return result;
-}
+});
 
 
 module.exports = router;
