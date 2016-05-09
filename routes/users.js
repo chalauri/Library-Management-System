@@ -44,6 +44,45 @@ router.post('/add', function (req, res, next) {
     });
 });
 
+router.post('/edit', function (req, res, next) {
+    var tempUser = req.body;
+    var tempPersonalNo = tempUser.personalNo;
+    var tempUsername = tempUser.username;
+
+    User.findOne({
+        personalNo: tempPersonalNo
+    }, function (err, user) {
+        if (user == null) {
+            res.writeHead(400, "USER IS ALREADY REGISTERED", {'content-type': 'application/json'});
+            res.end("USER IS ALREADY REGISTERED");
+        } else {
+
+            if(tempUsername == user.username){
+                User.update(tempUser, function (err) {
+                    if (err) return next(err);
+                });
+
+                getUsers(req, res, next);
+            }else{
+                User.find({
+                    username :  tempUsername
+                },function (err, users) {
+                    if (users.length) {
+                        res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
+                        res.end("USERNAME IS ALREADY USED");
+                    }else{
+                        User.update(tempUser, function (err) {
+                            if (err) return next(err);
+                        });
+
+                        getUsers(req, res, next);
+                    }
+                });
+            }
+        }
+    });
+});
+
 router.post('/auth', function (req, res, next) {
     var tempUsername = req.body.username;
     var tempPassword = req.body.password;
@@ -63,5 +102,24 @@ router.post('/auth', function (req, res, next) {
 
 });
 
+router.get('/remove', function (req, res, next) {
+    var tempPersonalNo = req.query.isbn;
+
+    User.findOne({
+        isbn: tempPersonalNo
+    }, function (err, user) {
+        if (user == null) {
+            res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});
+            res.end("Illegal Argument.");
+        } else {
+            User.remove(user, function (err) {
+                if (err) return next(err);
+            });
+
+            getUsers(req, res, next);
+        }
+    });
+
+});
 
 module.exports = router;

@@ -7,7 +7,6 @@ var router = express.Router();
 var Book = require('../models/Book');
 
 
-
 function getBooks(req, res, next) {
     Book.find({}, function (err, books) {
         if (err) return next(err);
@@ -38,7 +37,6 @@ router.post('/add', function (req, res, next) {
         if (books.length) {
             res.writeHead(400, "ISBN IS NOT UNIQUE", {'content-type': 'application/json'});
             res.end("ISBN IS NOT UNIQUE");
-            console.log("shevida isbnshi");
         } else {
             Book.find({
                 shelf: tempShelf,
@@ -57,6 +55,75 @@ router.post('/add', function (req, res, next) {
             });
         }
     });
+});
+
+router.post('/edit', function (req, res, next) {
+    var tempBook = req.body;
+    var tempRoom = tempBook.room;
+    var tempShelf = tempBook.shelf;
+    var quantity = tempBook.quantity;
+    var tempISBN = tempBook.isbn;
+
+
+    if (quantity <= 0) {
+        res.writeHead(400, "Books quantity in library must be more than 0", {'content-type': 'application/json'});
+        res.end("Books quantity in library must be more than 0");
+        return;
+    }
+
+    Book.findOne({
+        isbn: tempISBN
+    }, function (err, book) {
+        if (book == null) {
+            res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});
+            res.end("Illegal Argument.");
+        } else {
+            if (tempShelf == book.shelf && tempRoom == book.room) {
+                Book.update(tempBook, function (err) {
+                    if (err) return next(err);
+                });
+
+                getBooks(req, res, next);
+            } else {
+                Book.find({
+                    shelf: tempShelf,
+                    room: tempRoom
+                }, function (err, books) {
+                    if (books.length) {
+                        res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
+                        res.end("Place Is Not Available");
+                    } else {
+                        Book.update(tempBook, function (err) {
+                            if (err) return next(err);
+                        });
+
+                        getBooks(req, res, next);
+                    }
+                });
+            }
+        }
+    });
+});
+
+
+router.get('/remove', function (req, res, next) {
+    var tempISBN = req.query.isbn;
+
+    Book.findOne({
+        isbn: tempISBN
+    }, function (err, book) {
+        if (book == null) {
+            res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});
+            res.end("Illegal Argument.");
+        } else {
+            Book.remove(book, function (err) {
+                if (err) return next(err);
+            });
+
+            getBooks(req, res, next);
+        }
+    });
+
 });
 
 
