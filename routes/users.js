@@ -62,8 +62,8 @@ router.post('/add', function (req, res, next) {
             }, function (err, users) {
                 if (users.length) {
                     res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
-                    res.end("USERNAME IS ALREADY USED");
-                } else {
+                    res.end({"message" : "ასეთი მომხმარებელი უკვე არსებობს!"});
+                }else{
                     User.create(tempUser, function (err) {
                         if (err) return next(err);
                     });
@@ -86,7 +86,7 @@ router.post('/edit', function (req, res, next) {
     }, function (err, user) {
         if (user == null) {
             res.writeHead(400, "USER IS ALREADY REGISTERED", {'content-type': 'application/json'});
-            res.end("USER IS ALREADY REGISTERED");
+            res.end({"message" : "არასწორი პარამეტრი!"});
         } else {
 
             if (tempUsername == user.username) {
@@ -101,8 +101,8 @@ router.post('/edit', function (req, res, next) {
                 }, function (err, users) {
                     if (users.length) {
                         res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
-                        res.end("USERNAME IS ALREADY USED");
-                    } else {
+                        res.end({"message" : "ასეთი მომხმარებელის სახელი უკვე არსებობს!"});
+                    }else{
                         User.update(tempUser, function (err) {
                             if (err) return next(err);
                         });
@@ -126,7 +126,7 @@ router.post('/auth', function (req, res, next) {
     }, function (err, user) {
         if (!user) {
             res.writeHead(400, "ILLEGAL USERNAME OR PASSWORD", {'content-type': 'application/json'});
-            res.end("ILLEGAL USERNAME OR PASSWORD");
+            res.end({"message" : "მომხმარებლის სახელი ან პაროლი არასწორია !"});
         } else {
             res.send(user);
         }
@@ -142,7 +142,7 @@ router.post('/remove', function (req, res, next) {
     }, function (err, user) {
         if (user == null) {
             res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});
-            res.end("Illegal Argument.");
+            res.end({"message" : "არასწორი პარამეტრი!"});
         } else {
             User.remove(user, function (err) {
                 if (err) return next(err);
