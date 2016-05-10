@@ -12,26 +12,58 @@ function getUsers(req, res, next) {
 
 router.get('/list', getUsers);
 
+router.get('/get', function (req, res) {
+    User.findById(req.query.id, function (err, book) {
+        res.send(book)
+    })
+});
+
 router.post('/add', function (req, res, next) {
     var tempUser = req.body;
     var tempPersonalNo = tempUser.personalNo;
     var tempUsername = tempUser.username;
 
-    User.find({
+    User.findOne({
         personalNo: tempPersonalNo
-    }, function (err, users) {
-        if (users.length) {
-            res.writeHead(400, "USER IS ALREADY REGISTERED", {'content-type': 'application/json'});
-            res.end("USER IS ALREADY REGISTERED");
+    }, function (err, user) {
+        if (user != null) {
+            user.name = req.body.name;
+            user.Surname = req.body.Surname;
+            user.personalNo = req.body.personalNo;
+            user.username = req.body.username;
+     //       user.password = req.body.password;
+
+
+            if (tempUsername == user.username) {
+                user.save(function (err) {
+                    if (err) return next(err);
+                    getUsers(req, res, next);
+                });
+            }else{
+                User.find({
+                    username: tempUsername
+                }, function (err, users) {
+                    if (users.length) {
+                        res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
+                        res.end("USERNAME IS ALREADY USED");
+                    } else {
+                        User.update(tempUser, function (err) {
+                            if (err) return next(err);
+                        });
+
+                        getUsers(req, res, next);
+                    }
+                });
+            }
         } else {
 
             User.find({
-               username :  tempUsername
-            },function (err, users) {
+                username: tempUsername
+            }, function (err, users) {
                 if (users.length) {
                     res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
                     res.end("USERNAME IS ALREADY USED");
-                }else{
+                } else {
                     User.create(tempUser, function (err) {
                         if (err) return next(err);
                     });
@@ -57,20 +89,20 @@ router.post('/edit', function (req, res, next) {
             res.end("USER IS ALREADY REGISTERED");
         } else {
 
-            if(tempUsername == user.username){
+            if (tempUsername == user.username) {
                 User.update(tempUser, function (err) {
                     if (err) return next(err);
                 });
 
                 getUsers(req, res, next);
-            }else{
+            } else {
                 User.find({
-                    username :  tempUsername
-                },function (err, users) {
+                    username: tempUsername
+                }, function (err, users) {
                     if (users.length) {
                         res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
                         res.end("USERNAME IS ALREADY USED");
-                    }else{
+                    } else {
                         User.update(tempUser, function (err) {
                             if (err) return next(err);
                         });
@@ -102,11 +134,11 @@ router.post('/auth', function (req, res, next) {
 
 });
 
-router.get('/remove', function (req, res, next) {
-    var tempPersonalNo = req.query.isbn;
+router.post('/remove', function (req, res, next) {
+    var tempPersonalNo = req.body.personalNo;
 
     User.findOne({
-        isbn: tempPersonalNo
+        personalNo: tempPersonalNo
     }, function (err, user) {
         if (user == null) {
             res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});

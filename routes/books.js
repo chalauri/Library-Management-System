@@ -16,6 +16,12 @@ function getBooks(req, res, next) {
 
 router.get('/list', getBooks);
 
+router.get('/get', function (req, res) {
+    Book.findById(req.query.id, function (err, book) {
+        res.send(book)
+    })
+});
+
 
 router.post('/add', function (req, res, next) {
     var tempBook = req.body;
@@ -31,12 +37,43 @@ router.post('/add', function (req, res, next) {
         return;
     }
 
-    Book.find({
+    Book.findOne({
         isbn: tempISBN
-    }, function (err, books) {
-        if (books.length) {
-            res.writeHead(400, "ISBN IS NOT UNIQUE", {'content-type': 'application/json'});
-            res.end("ISBN IS NOT UNIQUE");
+    }, function (err, book) {
+        if (book != null) {
+     //       res.writeHead(400, "ISBN IS NOT UNIQUE", {'content-type': 'application/json'});
+     //       res.end("ISBN IS NOT UNIQUE");
+
+            book.title = req.body.title;
+            book.author = req.body.author;
+            book.year = req.body.year;
+            book.room = req.body.room;
+            book.shelf = req.body.shelf;
+            book.quantity = req.body.quantity;
+
+            if (tempShelf == book.shelf && tempRoom == book.room) {
+                Book.update(tempBook, function (err) {
+                    if (err) return next(err);
+                });
+
+                getBooks(req, res, next);
+            }else{
+                Book.find({
+                    shelf: tempShelf,
+                    room: tempRoom
+                }, function (err, books) {
+                    if (books.length) {
+                        res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
+                        res.end("Place Is Not Available");
+                    } else {
+                        Book.update(book, function (err) {
+                            if (err) return next(err);
+                        });
+
+                        getBooks(req, res, next);
+                    }
+                });
+            }
         } else {
             Book.find({
                 shelf: tempShelf,
@@ -106,8 +143,8 @@ router.post('/edit', function (req, res, next) {
 });
 
 
-router.get('/remove', function (req, res, next) {
-    var tempISBN = req.query.isbn;
+router.post('/remove', function (req, res, next) {
+    var tempISBN = req.body.isbn;
 
     Book.findOne({
         isbn: tempISBN

@@ -16,8 +16,8 @@
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
 </head>
-
 <body>
+
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -34,8 +34,8 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">წიგნები</a></li>
-                <li><a href="users.html">მომხმარებლები</a></li>
+                <li><a href="/">წიგნები</a></li>
+                <li class="active"><a href="#">მომხმარებლები</a></li>
             </ul>
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
@@ -50,20 +50,16 @@
     </div>
 </nav>
 <div class="container">
-    <button type="button" class="btn btn-primary btn" onclick="addBookModal()">
+    <button type="button" class="btn btn-primary btn" onclick="addUserModal()">
         დამატება
     </button>
     <table id="grid-data" class="table table-bordered">
         <thead>
         <tr>
             <th>სახელი</th>
-            <th>ავტორი</th>
-            <th>ISBN</th>
-            <th>წელი</th>
-            <th>ოთახი</th>
-            <th>თარო</th>
-            <th>რაოდენობა</th>
-            <th>გატანილი</th>
+            <th>გვარი</th>
+            <th>პირადი ნომერი</th>
+            <th>მომხმარებლის სახელი</th>
             <th></th>
         </tr>
         </thead>
@@ -76,58 +72,41 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">წიგნი</h4>
             </div>
             <div class="modal-body">
                 <form id="addForm" class="form-horizontal">
                     <div class="form-group">
-                        <label for="title" class="col-sm-2 control-label">სახელი</label>
-                        <div class="col-sm-10">
-                            <input type="text" id = "title" class="form-control" placeholder="სახელი">
+                        <label for="name" class="col-sm-3 control-label">სახელი</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="name" class="form-control" placeholder="სახელი">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="author" class="col-sm-2 control-label">ავტორი</label>
-                        <div class="col-sm-10">
-                            <input type="text" id = "author" class="form-control" placeholder="ავტორი">
+                        <label for="Surname" class="col-sm-3 control-label">გვარი</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="Surname" class="form-control" placeholder="გვარი">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="isbn" class="col-sm-2 control-label">ISBN</label>
-                        <div class="col-sm-10">
-                            <input type="text" id = "isbn" class="form-control" placeholder="ISBN">
+                        <label for="personalNo" class="col-sm-3 control-label">პირადი ნომერი</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="personalNo" class="form-control" placeholder="პირადი ნომერი">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="year" class="col-sm-2 control-label">წელი</label>
-                        <div class="col-sm-10">
-                            <input type="text" id = "year" class="form-control" placeholder="წელი">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="room" class="col-sm-2 control-label">ოთახი</label>
-                        <div class="col-sm-10">
-                            <input type="text" id = "room" class="form-control" placeholder="ოთახი">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="shelf" class="col-sm-2 control-label">თარო</label>
-                        <div class="col-sm-10">
-                            <input type="text" id = "shelf" class="form-control" placeholder="თარო">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity" class="col-sm-2 control-label">რაოდენობა</label>
-                        <div class="col-sm-10">
-                            <input type="text" id = "quantity" class="form-control" placeholder="რაოდენობა">
+                        <label for="username" class="col-sm-3 control-label">მომხმარებელი</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="username" class="form-control" placeholder="მომხმარებლის სახელი">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">გაუქმება</button>
-                <button type="button" class="btn btn-primary" onclick="addBook()">შენახვა</button>
+                <button type="button" class="btn btn-primary" onclick="addUser()">შენახვა</button>
             </div>
         </div>
     </div>
@@ -139,10 +118,10 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-    var fields = ["title", "author", "isbn", "year", "room", "shelf", "quantity", "taken"];
+    var fields = ["name", "Surname", "personalNo", "username"];
     $(document).ready(function () {
         var table = document.getElementById('body');
-        $.get("books/list", function (data) {
+        $.get("users/list", function (data) {
             for (var i in data) {
                 var row = document.createElement('tr');
                 for (var j in fields) {
@@ -151,10 +130,10 @@
                     row.appendChild(td);
                 }
                 var td = document.createElement('td');
-                td.innerHTML = '<button type="button" class="btn btn-primary btn-xs" onclick="editBook(\'' + data[i]._id + '\')">\
+                td.innerHTML = '<button type="button" class="btn btn-primary btn-xs" onclick="editUser(\'' + data[i]._id + '\')">\
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>\
                         </button>\
-                        <button type="button" class="btn btn-danger btn-xs" onclick="deleteBook(\'' + data[i].isbn + '\')">\
+                        <button type="button" class="btn btn-danger btn-xs" onclick="deleteUser(\'' + data[i].personalNo + '\')">\
                         <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>\
                         </button>';
                 row.appendChild(td);
@@ -163,16 +142,15 @@
         });
     });
 
-    function deleteBook(isbn) {
-        $.post("books/remove", {isbn: isbn}, function () {
+    function deleteUser(personalNo) {
+        $.post("users/remove", {personalNo: personalNo}, function () {
             location.reload()
         });
     }
 
-    function editBook(id) {
-        document.getElementById("isbn").disabled = true
-        var fields = ["title", "author", "isbn", "year", "room", "shelf", "quantity"];
-        $.get("books/get", {id: id}, function (data) {
+    function editUser(id) {
+        document.getElementById("personalNo").disabled = true
+        $.get("users/get", {id: id}, function (data) {
             for (var i in fields) {
                 var el = document.getElementById(fields[i]);
                 el.value = data[fields[i]] ? data[fields[i]] : ""
@@ -181,25 +159,25 @@
         });
     }
 
-    function addBook() {
-        var fields = ["title", "author", "isbn", "year", "room", "shelf", "quantity"];
+    function addUser() {
 
         var object = {};
-        for(var i in fields){
-          var tempField =   document.getElementById(fields[i]).value;
+        for (var i in fields) {
+            var tempField = document.getElementById(fields[i]).value;
             object[fields[i]] = tempField;
         }
 
-        $.post("books/add", object, function () {
+        $.post("users/add", object, function () {
             location.reload()
         });
     }
 
-    function addBookModal() {
+    function addUserModal() {
         document.getElementById("addForm").reset()
-        document.getElementById("isbn").disabled = false
+        document.getElementById("personalNo").disabled = false
         $("#myModal").modal();
     }
 </script>
+
 </body>
 </html>
