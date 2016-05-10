@@ -1,50 +1,54 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
     <title>ბიბლიოთეკა</title>
-
-    <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="css/signin.css" rel="stylesheet">
+</head>
 
-  </head>
+<body>
 
-  <body>
+<div class="container">
 
-    <div class="container">
-
-      <form class="form-signin" action="index.html">
+    <div class="form-signin">
         <h2 class="form-signin-heading text-center ">ბიბლიოთეკა</h2>
         <label for="inputEmail" class="sr-only">Username</label>
-        <input name="username" type="text" id="inputEmail" class="form-control" placeholder="მომხმარებელი" required autofocus>
+        <input name="username" type="text" id="inputEmail" class="form-control" placeholder="მომხმარებელი" required
+               autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input  name="password" type="password" id="inputPassword" class="form-control" placeholder="პაროლი" required>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> დამახსოვრება
-          </label>
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">შესვლა</button>
-      </form>
+        <input name="password" type="password" id="inputPassword" class="form-control" placeholder="პაროლი" required>
+        <button class="btn btn-lg btn-primary btn-block" onclick="submit()">შესვლა</button>
+    </div>
 
-    </div> <!-- /container -->
+</div> <!-- /container -->
+<!--<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>-->
+<script>
+    function submit() {
+        var username = document.getElementById("inputEmail").value;
+        var password = document.getElementById("inputPassword").value;
+
+        var http = new XMLHttpRequest();
+        var url = "users/auth";
+        http.open("POST", url, true);
+        http.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-  </body>
+        http.onreadystatechange = function () {
+            if (http.status == 400) {
+                location.reload()
+            }
+            if (http.readyState == 4 && http.status == 200) {
+                console.log(http.responseText);
+                location.replace("index.html");
+            }
+        };
+        http.send(JSON.stringify({
+            username: username,
+            password: password
+        }));
+    }
+</script>
+</body>
 </html>
