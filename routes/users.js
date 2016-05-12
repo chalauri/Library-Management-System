@@ -2,10 +2,11 @@ var express = require('express');
 var router = express.Router();
 
 var User = require('../models/User');
-
+var sss;
 function getUsers(req, res, next) {
     User.find({}, function (err, users) {
         if (err) return next(err);
+        sss = users;
         res.send(users);
     });
 }
@@ -28,26 +29,29 @@ router.post('/add', function (req, res, next) {
     }, function (err, user) {
         if (user != null) {
             user.name = req.body.name;
-            user.Surname = req.body.Surname;
+            user.surname = req.body.surname;
             user.personalNo = req.body.personalNo;
-            user.username = req.body.username;
-     //       user.password = req.body.password;
 
 
-            if (tempUsername == user.username) {
-                user.save(function (err) {
+            if(user.username == tempUsername){
+                User.update(user, function (err) {
                     if (err) return next(err);
-                    getUsers(req, res, next);
                 });
+
+                getUsers(req, res, next);
+                console.log(user)
+                console.log(1111)
+                console.log(sss)
             }else{
                 User.find({
                     username: tempUsername
-                }, function (err, users) {
-                    if (users.length) {
+                },function(err,users){
+                    if(users.length){
                         res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
-                        res.end("USERNAME IS ALREADY USED");
-                    } else {
-                        User.update(tempUser, function (err) {
+                        res.end({"message" : "ასეთი მომხმარებელი უკვე არსებობს!"});
+                    }else{
+                        user.username = req.body.username;
+                        User.update(user, function (err) {
                             if (err) return next(err);
                         });
 

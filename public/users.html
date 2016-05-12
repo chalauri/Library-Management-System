@@ -85,9 +85,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="Surname" class="col-sm-3 control-label">გვარი</label>
+                        <label for="surname" class="col-sm-3 control-label">გვარი</label>
                         <div class="col-sm-9">
-                            <input type="text" id="Surname" class="form-control" placeholder="გვარი">
+                            <input type="text" id="surname" class="form-control" placeholder="გვარი">
                         </div>
                     </div>
                     <div class="form-group">
@@ -118,7 +118,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-    var fields = ["name", "Surname", "personalNo", "username"];
+    var fields = ["name", "surname", "personalNo", "username"];
     $(document).ready(function () {
         var table = document.getElementById('body');
         $.get("users/list", function (data) {
