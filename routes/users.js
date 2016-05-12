@@ -66,7 +66,7 @@ router.post('/add', function (req, res, next) {
             }, function (err, users) {
                 if (users.length) {
                     res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
-                    res.end({"message" : "ასეთი მომხმარებელი უკვე არსებობს!"});
+                    res.end("USERNAME IS ALREADY USED");
                 }else{
                     User.create(tempUser, function (err) {
                         if (err) return next(err);
@@ -90,7 +90,7 @@ router.post('/edit', function (req, res, next) {
     }, function (err, user) {
         if (user == null) {
             res.writeHead(400, "USER IS ALREADY REGISTERED", {'content-type': 'application/json'});
-            res.end({"message" : "არასწორი პარამეტრი!"});
+            res.end("USER IS ALREADY REGISTERED");
         } else {
 
             if (tempUsername == user.username) {
@@ -105,7 +105,7 @@ router.post('/edit', function (req, res, next) {
                 }, function (err, users) {
                     if (users.length) {
                         res.writeHead(400, "USERNAME IS ALREADY USED", {'content-type': 'application/json'});
-                        res.end({"message" : "ასეთი მომხმარებელის სახელი უკვე არსებობს!"});
+                        res.end("USERNAME IS ALREADY USED");
                     }else{
                         User.update(tempUser, function (err) {
                             if (err) return next(err);
