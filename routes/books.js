@@ -33,7 +33,7 @@ router.post('/add', function (req, res, next) {
 
     if (quantity <= 0) {
         res.writeHead(400, "Books quantity in library must be more than 0", {'content-type': 'application/json'});
-        res.end({"message" : "წიგნების რაოდენობა უნდა იყოს 0-ზე მეტი"});
+        res.end({"message": "წიგნების რაოდენობა უნდა იყოს 0-ზე მეტი"});
         return;
     }
 
@@ -41,8 +41,8 @@ router.post('/add', function (req, res, next) {
         isbn: tempISBN
     }, function (err, book) {
         if (book != null) {
-     //       res.writeHead(400, "ISBN IS NOT UNIQUE", {'content-type': 'application/json'});
-     //       res.end("ISBN IS NOT UNIQUE");
+            //       res.writeHead(400, "ISBN IS NOT UNIQUE", {'content-type': 'application/json'});
+            //       res.end("ISBN IS NOT UNIQUE");
 
             book.title = req.body.title;
             book.author = req.body.author;
@@ -57,7 +57,7 @@ router.post('/add', function (req, res, next) {
                 });
 
                 getBooks(req, res, next);
-            }else{
+            } else {
                 Book.find({
                     shelf: tempShelf,
                     room: tempRoom
@@ -81,8 +81,10 @@ router.post('/add', function (req, res, next) {
             }, function (err, books) {
                 if (books.length) {
                     res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
-                    res.end({"message" : "მითითებული ადგილი დაკავებულია!"});
+                    res.end({"message": "მითითებული ადგილი დაკავებულია!"});
                 } else {
+                    tempBook.voteCount  = 0;
+                    tempBook.currRating = 0;
                     Book.create(tempBook, function (err) {
                         if (err) return next(err);
                     });
@@ -104,7 +106,7 @@ router.post('/edit', function (req, res, next) {
 
     if (quantity <= 0) {
         res.writeHead(400, "Books quantity in library must be more than 0", {'content-type': 'application/json'});
-        res.end({"message" : "წიგნის რაოდენობა უნდა იყოს 0-ზე მეტი"});
+        res.end({"message": "წიგნის რაოდენობა უნდა იყოს 0-ზე მეტი"});
         return;
     }
 
@@ -113,7 +115,7 @@ router.post('/edit', function (req, res, next) {
     }, function (err, book) {
         if (book == null) {
             res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});
-            res.end({"message" : "არასწორი პარამეტრი !"});
+            res.end({"message": "არასწორი პარამეტრი !"});
         } else {
             if (tempShelf == book.shelf && tempRoom == book.room) {
                 Book.update(tempBook, function (err) {
@@ -128,7 +130,7 @@ router.post('/edit', function (req, res, next) {
                 }, function (err, books) {
                     if (books.length) {
                         res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
-                        res.end({"message" : "მითითებული ადგილი არ არის თავისუფალი!"});
+                        res.end({"message": "მითითებული ადგილი არ არის თავისუფალი!"});
                     } else {
                         Book.update(tempBook, function (err) {
                             if (err) return next(err);
@@ -151,7 +153,7 @@ router.post('/remove', function (req, res, next) {
     }, function (err, book) {
         if (book == null) {
             res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});
-            res.end({"message" : "არასწორი პარამეტრი !"});
+            res.end({"message": "არასწორი პარამეტრი !"});
         } else {
             Book.remove(book, function (err) {
                 if (err) return next(err);
@@ -165,28 +167,23 @@ router.post('/remove', function (req, res, next) {
 
 
 router.post('/addRating', function (req, res, next) {
-    var tempISBN = req.body.book.isbn;
+    var tempISBN = req.body.isbn;
     var grade = req.body.grade;
 
     if (grade < 0 || grade > 10) {
         res.writeHead(400, "ILLEGAL GRADE", {'content-type': 'application/json'});
-        res.end({"message" : "ქულა უნდა იყოს [0;10] შუალედში !"});
+        res.end("ქულა უნდა იყოს [0;10] შუალედში !");
         return;
     } else {
         Book.findOne({
             isbn: tempISBN
         }, function (err, book) {
-            if (err) return new Error("Error occuered");
+            if (err) return new Error("Error occurred");
 
-            rating = book.rating;
-            rating.push(grade);
-            var currRating = 0;
-            var sum = 0;
-            for (var i = 0; i < rating.length; i++) {
-                sum += rating[i];
-            }
-            currRating = sum / rating.length;
-            book.currRating = currRating;
+            var sum = book.voteCount * book.currRating;
+            sum += grade;
+            book.voteCount = book.voteCount + 1;
+            book.currRating = sum / book.voteCount;
 
             Book.update(book, function (error, book) {
                 if (error) return next(error);

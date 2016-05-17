@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b942eecd-83bc-422b-909f-fb5b654b3ab6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/users.js" afterPath="$PROJECT_DIR$/routes/users.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/Book.js" afterPath="$PROJECT_DIR$/models/Book.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/books.js" afterPath="$PROJECT_DIR$/routes/books.js" />
     </list>
     <ignored path="Library-Management-System.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,21 +26,11 @@
     <favorites_list name="Library-Management-System" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="users.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/routes/users.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33333334">
-              <caret line="107" column="58" selection-start-line="107" selection-start-column="58" selection-end-line="107" selection-end-column="58" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="users.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/users.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.6909091">
+            <state vertical-scroll-proportion="-0.65384614">
               <caret line="89" column="27" selection-start-line="89" selection-start-column="27" selection-end-line="89" selection-end-column="27" />
               <folding>
                 <marker date="1463049301740" expanded="true" signature="5688:5814" placeholder="..." />
@@ -48,14 +40,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="books.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="books.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/books.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="72" column="49" selection-start-line="68" selection-start-column="23" selection-end-line="72" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.6407035">
+              <caret line="86" column="39" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="39" />
               <folding>
-                <marker date="1462890860037" expanded="true" signature="4676:5117" placeholder="{...}" />
+                <marker date="1463504150222" expanded="true" signature="4777:5217" placeholder="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Book.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/Book.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="15" column="41" selection-start-line="15" selection-start-column="41" selection-end-line="15" selection-end-column="41" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -87,10 +89,11 @@
         <option value="$PROJECT_DIR$/public/index2.html" />
         <option value="$PROJECT_DIR$/public/login.html" />
         <option value="$PROJECT_DIR$/public/js/dataTables.editor.min.js" />
-        <option value="$PROJECT_DIR$/routes/books.js" />
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/users.html" />
         <option value="$PROJECT_DIR$/routes/users.js" />
+        <option value="$PROJECT_DIR$/models/Book.js" />
+        <option value="$PROJECT_DIR$/routes/books.js" />
       </list>
     </option>
   </component>
@@ -132,9 +135,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -197,6 +197,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -687,7 +690,8 @@
       <workItem from="1462867052081" duration="4076000" />
       <workItem from="1462874932092" duration="14153000" />
       <workItem from="1462892539300" duration="1270000" />
-      <workItem from="1463048411881" duration="1367000" />
+      <workItem from="1463048411881" duration="1399000" />
+      <workItem from="1463503381813" duration="1146000" />
     </task>
     <task id="LOCAL-00001" summary="login">
       <created>1462877029577</created>
@@ -699,10 +703,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26328000" />
+    <option name="totallyTimeSpent" value="27506000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1378" height="744" extended-state="0" />
+    <frame x="-8" y="-8" width="1378" height="744" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -714,7 +718,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18355359" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18281938" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -757,6 +761,35 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/routes/users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/users.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="89" column="27" selection-start-line="89" selection-start-column="27" selection-end-line="89" selection-end-column="27" />
+          <folding>
+            <marker date="1463049301740" expanded="true" signature="5688:5814" placeholder="..." />
+            <marker date="1463049301740" expanded="true" signature="5945:6080" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/books.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="72" column="49" selection-start-line="68" selection-start-column="23" selection-end-line="72" selection-end-column="49" />
+          <folding>
+            <marker date="1463504150222" expanded="true" signature="4777:5217" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -786,7 +819,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -825,7 +857,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="53" column="11" selection-start-line="53" selection-start-column="11" selection-end-line="59" selection-end-column="13" />
           <folding>
-            <marker date="1462890860037" expanded="true" signature="4676:5117" placeholder="{...}" />
+            <marker date="1463504150222" expanded="true" signature="4777:5217" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -834,7 +866,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -842,7 +873,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -873,7 +903,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="108" column="0" selection-start-line="108" selection-start-column="0" selection-end-line="126" selection-end-column="3" />
           <folding>
-            <marker date="1462890860037" expanded="true" signature="4676:5117" placeholder="{...}" />
+            <marker date="1463504150222" expanded="true" signature="4777:5217" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -912,7 +942,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="108" column="0" selection-start-line="108" selection-start-column="0" selection-end-line="126" selection-end-column="3" />
           <folding>
-            <marker date="1462890860037" expanded="true" signature="4676:5117" placeholder="{...}" />
+            <marker date="1463504150222" expanded="true" signature="4777:5217" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -999,7 +1029,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1025,18 +1054,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/Book.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="8" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/User.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2562814">
           <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1047,19 +1068,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/books.js">
+    <entry file="file://$PROJECT_DIR$/models/Book.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="72" column="49" selection-start-line="68" selection-start-column="23" selection-end-line="72" selection-end-column="49" />
-          <folding>
-            <marker date="1462890860037" expanded="true" signature="4676:5117" placeholder="{...}" />
-          </folding>
+          <caret line="15" column="41" selection-start-line="15" selection-start-column="41" selection-end-line="15" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52970296">
+          <caret line="108" column="26" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/users.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.6909091">
+        <state vertical-scroll-proportion="-0.65384614">
           <caret line="89" column="27" selection-start-line="89" selection-start-column="27" selection-end-line="89" selection-end-column="27" />
           <folding>
             <marker date="1463049301740" expanded="true" signature="5688:5814" placeholder="..." />
@@ -1068,11 +1095,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/users.js">
+    <entry file="file://$PROJECT_DIR$/routes/books.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="107" column="58" selection-start-line="107" selection-start-column="58" selection-end-line="107" selection-end-column="58" />
-          <folding />
+        <state vertical-scroll-proportion="0.6407035">
+          <caret line="86" column="39" selection-start-line="86" selection-start-column="29" selection-end-line="86" selection-end-column="39" />
+          <folding>
+            <marker date="1463504150222" expanded="true" signature="4777:5217" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
