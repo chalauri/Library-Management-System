@@ -147,7 +147,7 @@
                 var row = document.createElement('tr');
                 for (var j in fields) {
                     var td = document.createElement('td');
-                    td.innerText = data[i][fields[j]] ? data[i][fields[j]] : "";
+                    td.innerText = data[i][fields[j]] ? data[i][fields[j]] : 0;
                     row.appendChild(td);
                 }
                 var td = document.createElement('td');

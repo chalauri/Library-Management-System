@@ -15,7 +15,8 @@ var schema = new mongoose.Schema({
     currRating:  { type: Number, min: 0, max: 10 },
     voteCount : { type: Number, min: 0 },
     quantity: String,
-    taken: String
+    taken: { type: Number, min: 0 },
+    readers : []
 });
 
 module.exports = mongoose.model('Book', schema);
