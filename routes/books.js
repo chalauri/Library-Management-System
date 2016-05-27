@@ -130,15 +130,21 @@ router.post('/addRating', function (req, res, next) {
     } else {
         Book.findOne({
             isbn: tempISBN
+        }, {
+            voteCount: 1,
+            currRating: 1
         }, function (err, book) {
             if (err) return new Error("Error occurred");
 
             var sum = book.voteCount * book.currRating;
             sum += grade;
-            book.voteCount = book.voteCount + 1;
-            book.currRating = sum / book.voteCount;
 
-            Book.update(book, function (error, book) {
+            Book.update({isbn: tempISBN}, {
+                $set: {
+                    voteCount: book.voteCount + 1,
+                    currRating: sum / book.voteCount
+                }
+            }, function (error, book) {
                 if (error) return next(error);
 
                 res.send(book);
@@ -181,8 +187,8 @@ router.post('/takeBook', function (req, res, next) {
                 surname: tempSurname,
                 personalNo: tempPersonalNo,
                 mobile: tempMobile,
-                takeDate : now,
-                takeOperationCode : now.getTime()+"T"
+                takeDate: now,
+                takeOperationCode: now.getTime() + "T"
             }
 
             book.readers.push(reader);
@@ -204,7 +210,7 @@ router.post('/returnBook', function (req, res, next) {
 
     Book.findOne({
         isbn: tempISBN,
-        "readers.takeOperationCode" : opCode
+        "readers.takeOperationCode": opCode
     }, function (err, book) {
         if (err) return new Error("Error occurred");
 
@@ -218,17 +224,17 @@ router.post('/returnBook', function (req, res, next) {
         var now = new Date();
         console.log(now);
 
-        var ind ;
-        var reader ;
-        for(var i = 0; i < book.readers.length; i++){
-            if(book.readers[i].takeOperationCode == opCode){
+        var ind;
+        var reader;
+        for (var i = 0; i < book.readers.length; i++) {
+            if (book.readers[i].takeOperationCode == opCode) {
                 ind = i;
                 reader = book.readers[i];
                 break;
             }
         }
 
-        reader.returnOperationCode = now.getTime()+"R";
+        reader.returnOperationCode = now.getTime() + "R";
         reader.returnDate = now;
         book.readers[ind] = reader;
 
