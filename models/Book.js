@@ -1,7 +1,3 @@
-/**
- * Created by Giga on 5/5/2016.
- */
-
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
@@ -16,7 +12,14 @@ var schema = new mongoose.Schema({
     voteCount : { type: Number, min: 0 },
     quantity: String,
     taken: { type: Number, min: 0 },
-    readers : []
+    readers : [{
+        name: String,
+        surname: String,
+        personalNo: String,
+        mobile: String,
+        takeDate: Date,
+        takeOperationCode: String
+    }]
 });
 
 module.exports = mongoose.model('Book', schema);

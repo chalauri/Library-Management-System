@@ -76,7 +76,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">წიგნი</h4>
             </div>
             <div class="modal-body">
@@ -84,43 +85,43 @@
                     <div class="form-group">
                         <label for="title" class="col-sm-2 control-label">სახელი</label>
                         <div class="col-sm-10">
-                            <input type="text" id = "title" class="form-control" placeholder="სახელი">
+                            <input type="text" id="title" class="form-control" placeholder="სახელი">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="author" class="col-sm-2 control-label">ავტორი</label>
                         <div class="col-sm-10">
-                            <input type="text" id = "author" class="form-control" placeholder="ავტორი">
+                            <input type="text" id="author" class="form-control" placeholder="ავტორი">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="isbn" class="col-sm-2 control-label">ISBN</label>
                         <div class="col-sm-10">
-                            <input type="text" id = "isbn" class="form-control" placeholder="ISBN">
+                            <input type="text" id="isbn" class="form-control" placeholder="ISBN">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="year" class="col-sm-2 control-label">წელი</label>
                         <div class="col-sm-10">
-                            <input type="text" id = "year" class="form-control" placeholder="წელი">
+                            <input type="text" id="year" class="form-control" placeholder="წელი">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="room" class="col-sm-2 control-label">ოთახი</label>
                         <div class="col-sm-10">
-                            <input type="text" id = "room" class="form-control" placeholder="ოთახი">
+                            <input type="text" id="room" class="form-control" placeholder="ოთახი">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="shelf" class="col-sm-2 control-label">თარო</label>
                         <div class="col-sm-10">
-                            <input type="text" id = "shelf" class="form-control" placeholder="თარო">
+                            <input type="text" id="shelf" class="form-control" placeholder="თარო">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="quantity" class="col-sm-2 control-label">რაოდენობა</label>
                         <div class="col-sm-10">
-                            <input type="text" id = "quantity" class="form-control" placeholder="რაოდენობა">
+                            <input type="text" id="quantity" class="form-control" placeholder="რაოდენობა">
                         </div>
                     </div>
                 </form>
@@ -128,6 +129,56 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">გაუქმება</button>
                 <button type="button" class="btn btn-primary" onclick="addBook()">შენახვა</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="takeBookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">გატანა</h4>
+            </div>
+            <div class="modal-body">
+                <form id="takeBook" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">ISBN</label>
+                        <div class="col-sm-10">
+                            <input disabled type="text" id="tbisbn" class="form-control" placeholder="ISBN">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="author" class="col-sm-2 control-label">სახელი</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="tbname" class="form-control" placeholder="სახელი">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="isbn" class="col-sm-2 control-label">გვარი</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="tbsurname" class="form-control" placeholder="გვარი">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="year" class="col-sm-2 control-label">პირადი ნომერი</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="tbpersonalNo" class="form-control" placeholder="პირადი ნომერი">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="room" class="col-sm-2 control-label">ტელეფონი</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="tbmobile" class="form-control" placeholder="ტელეფონი">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">გაუქმება</button>
+                <button type="button" class="btn btn-primary" onclick="takeBook()">გატანა</button>
             </div>
         </div>
     </div>
@@ -151,7 +202,10 @@
                     row.appendChild(td);
                 }
                 var td = document.createElement('td');
-                td.innerHTML = '<button type="button" class="btn btn-primary btn-xs" onclick="editBook(\'' + data[i]._id + '\')">\
+                td.innerHTML = '<button type="button" class="btn btn-success btn-xs" onclick="openTakeBook(\'' + data[i].isbn + '\')">\
+                        <span class="glyphicon glyphicon glyphicon-home" aria-hidden="true"></span>\
+                        </button>\
+                        <button type="button" class="btn btn-primary btn-xs" onclick="editBook(\'' + data[i]._id + '\')">\
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>\
                         </button>\
                         <button type="button" class="btn btn-danger btn-xs" onclick="deleteBook(\'' + data[i].isbn + '\')">\
@@ -185,12 +239,35 @@
         var fields = ["title", "author", "isbn", "year", "room", "shelf", "quantity"];
 
         var object = {};
-        for(var i in fields){
-          var tempField =   document.getElementById(fields[i]).value;
+        for (var i in fields) {
+            var tempField = document.getElementById(fields[i]).value;
             object[fields[i]] = tempField;
         }
 
         $.post("books/add", object, function () {
+            location.reload()
+        });
+    }
+
+    function openTakeBook(isbn) {
+        $("#takeBookModal").modal();
+        $('#tbisbn').val(isbn)
+    }
+
+    function takeBook() {
+        var fields = [
+            {id: "tbisbn", name: "isbn"}, {id: "tbname", name: "name"},
+            {id: "tbsurname", name: "surname"}, {id: "tbpersonalNo", name: "personalNo"}, {
+                id: "tbmobile",
+                name: "mobile"
+            }];
+        var object = {};
+        for (var i in fields) {
+            var tempField = document.getElementById(fields[i].id).value;
+            object[fields[i].name] = tempField;
+        }
+
+        $.post("books/takeBook", object, function () {
             location.reload()
         });
     }
