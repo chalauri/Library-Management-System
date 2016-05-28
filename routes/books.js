@@ -33,7 +33,10 @@ router.post('/add', function (req, res, next) {
     tempBook.readers = [];
 
     if (quantity <= 0) {
-        res.writeHead(400, "Books quantity in library must be more than 0", {'content-type': 'application/json'});
+        res.writeHead(400, {
+            "error": "Illegal Parameter",
+            "message": "წიგნების რაოდენობა უნდა იყოს 0-ზე მეტი"
+        }, {'content-type': 'application/json'});
         res.end({"message": "წიგნების რაოდენობა უნდა იყოს 0-ზე მეტი"});
         return;
     }
@@ -65,7 +68,7 @@ router.post('/add', function (req, res, next) {
                     room: tempRoom
                 }, function (err, books) {
                     if (books.length) {
-                        res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
+                        res.writeHead(400, {"error": "Place is not available"}, {'content-type': 'application/json'});
                         res.end("Place Is Not Available");
                     } else {
                         Book.update(book, function (err) {
@@ -82,7 +85,7 @@ router.post('/add', function (req, res, next) {
                 room: tempRoom
             }, function (err, books) {
                 if (books.length) {
-                    res.writeHead(400, "Place Is Not Available", {'content-type': 'application/json'});
+                    res.writeHead(400, {"error": "Place is not available"}, {'content-type': 'application/json'});
                     res.end({"message": "მითითებული ადგილი დაკავებულია!"});
                 } else {
                     tempBook.voteCount = 0;
@@ -105,7 +108,7 @@ router.post('/remove', function (req, res, next) {
         isbn: tempISBN
     }, function (err, book) {
         if (book == null) {
-            res.writeHead(400, "Illegal Argument.", {'content-type': 'application/json'});
+            res.writeHead(400, {"error": "Illegal Parameter"}, {'content-type': 'application/json'});
             res.end({"message": "არასწორი პარამეტრი !"});
         } else {
             Book.remove(book, function (err) {
@@ -124,7 +127,10 @@ router.post('/addRating', function (req, res, next) {
     var grade = req.body.grade;
 
     if (grade < 0 || grade > 10) {
-        res.writeHead(400, "ILLEGAL GRADE", {'content-type': 'application/json'});
+        res.writeHead(400, {
+            "error": "Illegal Parameter",
+            "message": "ქულა უნდა იყოს [0;10] შუალედში !"
+        }, {'content-type': 'application/json'});
         res.end("ქულა უნდა იყოს [0;10] შუალედში !");
         return;
     } else {
@@ -163,7 +169,7 @@ router.post('/takeBook', function (req, res, next) {
         if (err) return new Error("Error occurred");
 
         if (book == null) {
-            res.writeHead(400, "ILLEGAL PARAMETER", {'content-type': 'application/json'});
+            res.writeHead(400, {"error": "Illegal Parameter"}, {'content-type': 'application/json'});
             res.end("ILLEGAL PARAMETER");
             return;
         }
@@ -172,7 +178,7 @@ router.post('/takeBook', function (req, res, next) {
         var now = new Date();
         console.log(now);
         if (book.taken == book.quantity) {
-            res.writeHead(400, "No Books In Library", {'content-type': 'application/json'});
+            res.writeHead(400, {"error": "No Books In Library"}, {'content-type': 'application/json'});
             res.end("No Books In Library");
             return;
         } else {
@@ -181,8 +187,8 @@ router.post('/takeBook', function (req, res, next) {
                 surname: tempSurname,
                 personalNo: tempPersonalNo,
                 mobile: tempMobile,
-                takeDate : now,
-                takeOperationCode : now.getTime()+"T"
+                takeDate: now,
+                takeOperationCode: now.getTime() + "T"
             }
 
             book.readers.push(reader);
@@ -204,12 +210,12 @@ router.post('/returnBook', function (req, res, next) {
 
     Book.findOne({
         isbn: tempISBN,
-        "readers.takeOperationCode" : opCode
+        "readers.takeOperationCode": opCode
     }, function (err, book) {
         if (err) return new Error("Error occurred");
 
         if (book == null) {
-            res.writeHead(400, "ILLEGAL PARAMETER", {'content-type': 'application/json'});
+            res.writeHead(400, {"error": "Illegal Parameter"}, {'content-type': 'application/json'});
             res.end("ILLEGAL PARAMETER");
             return;
         }
@@ -218,17 +224,17 @@ router.post('/returnBook', function (req, res, next) {
         var now = new Date();
         console.log(now);
 
-        var ind ;
-        var reader ;
-        for(var i = 0; i < book.readers.length; i++){
-            if(book.readers[i].takeOperationCode == opCode){
+        var ind;
+        var reader;
+        for (var i = 0; i < book.readers.length; i++) {
+            if (book.readers[i].takeOperationCode == opCode) {
                 ind = i;
                 reader = book.readers[i];
                 break;
             }
         }
 
-        reader.returnOperationCode = now.getTime()+"R";
+        reader.returnOperationCode = now.getTime() + "R";
         reader.returnDate = now;
         book.readers[ind] = reader;
 
