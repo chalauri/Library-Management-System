@@ -38,16 +38,15 @@ router.post('/add', function (req, res, next) {
                 });
 
                 getUsers(req, res, next);
-                console.log(user)
-                console.log(1111)
-                console.log(sss)
             } else {
                 User.find({
                     username: tempUsername
                 }, function (err, users) {
                     if (users.length) {
-                        res.writeHead(400, {"error": "Username is already used"}, {'content-type': 'application/json'});
-                        res.end({"message": "ასეთი მომხმარებელი უკვე არსებობს!"});
+                        res.writeHead(400, {'content-type': 'application/json'});
+                        res.write(JSON.stringify({"error": "Username is already used"}));
+                        res.end();
+                        return;
                     } else {
                         user.username = req.body.username;
                         User.update(user, function (err) {
@@ -64,8 +63,10 @@ router.post('/add', function (req, res, next) {
                 username: tempUsername
             }, function (err, users) {
                 if (users.length) {
-                    res.writeHead(400, {"error": "Username is already used"}, {'content-type': 'application/json'});
-                    res.end("USERNAME IS ALREADY USED");
+                                res.writeHead(400, {'content-type': 'application/json'});
+                    res.write(JSON.stringify( {"error": "Username is already used"}));
+                    res.end();
+                    return;
                 } else {
                     User.create(tempUser, function (err) {
                         if (err) return next(err);
@@ -88,8 +89,10 @@ router.post('/edit', function (req, res, next) {
         personalNo: tempPersonalNo
     }, function (err, user) {
         if (user == null) {
-            res.writeHead(400, {"error": "Username is already registered"}, {'content-type': 'application/json'});
-            res.end("USER IS ALREADY REGISTERED");
+            res.writeHead(400, {'content-type': 'application/json'});
+            res.write(JSON.stringify( {"error": "Username is already registered"}));
+            res.end();
+            return;
         } else {
 
             if (tempUsername == user.username) {
@@ -103,8 +106,10 @@ router.post('/edit', function (req, res, next) {
                     username: tempUsername
                 }, function (err, users) {
                     if (users.length) {
-                        res.writeHead(400, {"error": "Username is already used"}, {'content-type': 'application/json'});
-                        res.end("USERNAME IS ALREADY USED");
+                        res.writeHead(400, {'content-type': 'application/json'});
+                        res.write(JSON.stringify( {"error": "Username is already used"}));
+                        res.end();
+                        return;
                     } else {
                         User.update(tempUser, function (err) {
                             if (err) return next(err);
@@ -128,8 +133,10 @@ router.post('/auth', function (req, res, next) {
         password: tempPassword
     }, function (err, user) {
         if (!user) {
-            res.writeHead(400, {"error": "Illegal username or password"}, {'content-type': 'application/json'});
+            res.writeHead(400, {'content-type': 'application/json'});
+            res.write(JSON.stringify( {"error": "Illegal username or password"}));
             res.end();
+            return;
         } else {
             res.send(user);
         }
@@ -144,8 +151,10 @@ router.post('/remove', function (req, res, next) {
         personalNo: tempPersonalNo
     }, function (err, user) {
         if (user == null) {
-            res.writeHead(400, {"error": "Illegal argument"}, {'content-type': 'application/json'});
+            res.writeHead(400, {'content-type': 'application/json'});
+            res.write(JSON.stringify( {"error": "Illegal parameter"}));
             res.end();
+            return;
         } else {
             User.remove(user, function (err) {
                 if (err) return next(err);
