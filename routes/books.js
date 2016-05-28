@@ -220,7 +220,8 @@ router.post('/takeBook', function (req, res, next) {
             }, function (error, book) {
                 if (error) return next(error);
 
-                res.send(t_o_code);
+                res.write(JSON.stringify({"code": t_o_code}));
+                res.send();
             });
         }
     })
@@ -229,47 +230,59 @@ router.post('/takeBook', function (req, res, next) {
 router.post('/returnBook', function (req, res, next) {
     var tempISBN = req.body.isbn;
     var opCode = req.body.takeOperationCode;
+    var grade = req.body.grade;
 
+    if (grade < 0 || grade > 10) {
+        res.writeHead(400, {'content-type': 'application/json'});
+        res.write(JSON.stringify({"error": "Grade Must Be in [0;10]"}));
+        res.end();
+        return;
+    } else {
+        Book.findOne({
+            isbn: tempISBN,
+            "readers.takeOperationCode": opCode
+        }, function (err, book) {
+            if (err) return new Error("Error occurred");
 
-    Book.findOne({
-        isbn: tempISBN,
-        "readers.takeOperationCode": opCode
-    }, function (err, book) {
-        if (err) return new Error("Error occurred");
-
-        if (book == null) {
-            res.writeHead(400, {'content-type': 'application/json'});
-            res.write(JSON.stringify({"error": "Illegal Parameter"}));
-            res.end();
-            return;
-        }
-
-
-        var now = new Date();
-        console.log(now);
-
-        var ind;
-        var reader;
-        for (var i = 0; i < book.readers.length; i++) {
-            if (book.readers[i].takeOperationCode == opCode) {
-                ind = i;
-                reader = book.readers[i];
-                break;
+            if (book == null) {
+                res.writeHead(400, {'content-type': 'application/json'});
+                res.write(JSON.stringify({"error": "Illegal Parameter"}));
+                res.end();
+                return;
             }
-        }
 
-        reader.returnOperationCode = now.getTime() + "R";
-        reader.returnDate = now;
-        book.readers[ind] = reader;
 
-        book.taken = book.taken + 1;
+            var now = new Date();
+            console.log(now);
 
-        Book.update(book, function (error, book) {
-            if (error) return next(error);
+            var ind;
+            var reader;
+            for (var i = 0; i < book.readers.length; i++) {
+                if (book.readers[i].takeOperationCode == opCode) {
+                    ind = i;
+                    reader = book.readers[i];
+                    break;
+                }
+            }
 
-            res.send(book);
-        });
-    })
+            reader.returnOperationCode = now.getTime() + "R";
+            reader.returnDate = now;
+            book.readers[ind] = reader;
+
+            book.taken = book.taken - 1;
+
+            var sum = book.voteCount * book.currRating;
+            sum += grade;
+            book.voteCount = book.voteCount + 1;
+            book.currRating = sum / (book.voteCount);
+
+            Book.update(book, function (error, book) {
+                if (error) return next(error);
+
+                res.send(book);
+            });
+        })
+    }
 });
 
 module.exports = router;
