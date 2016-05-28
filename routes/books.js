@@ -8,7 +8,7 @@ var Book = require('../models/Book');
 
 
 function getBooks(req, res, next) {
-    Book.find({}, function (err, books) {
+    Book.find({}).sort({title: 1}).exec(function (err, books) {
         if (err) return next(err);
         res.send(books);
     });
@@ -17,7 +17,7 @@ function getBooks(req, res, next) {
 router.get('/list', getBooks);
 
 router.get('/get', function (req, res) {
-    Book.findById(req.query.id, function (err, book) {
+    Book.findById(req.query.id).exec(function (err, book) {
         res.send(book)
     })
 });
@@ -136,15 +136,21 @@ router.post('/addRating', function (req, res, next) {
     } else {
         Book.findOne({
             isbn: tempISBN
+        }, {
+            voteCount: 1,
+            currRating: 1
         }, function (err, book) {
             if (err) return new Error("Error occurred");
 
             var sum = book.voteCount * book.currRating;
             sum += grade;
-            book.voteCount = book.voteCount + 1;
-            book.currRating = sum / book.voteCount;
 
-            Book.update(book, function (error, book) {
+            Book.update({isbn: tempISBN}, {
+                $set: {
+                    voteCount: book.voteCount + 1,
+                    currRating: sum / book.voteCount
+                }
+            }, function (error, book) {
                 if (error) return next(error);
 
                 res.send(book);
@@ -165,6 +171,9 @@ router.post('/takeBook', function (req, res, next) {
 
     Book.findOne({
         isbn: tempISBN
+    }, {
+        taken: 1,
+        quantity: 1
     }, function (err, book) {
         if (err) return new Error("Error occurred");
 
@@ -176,7 +185,6 @@ router.post('/takeBook', function (req, res, next) {
 
 
         var now = new Date();
-        console.log(now);
         if (book.taken == book.quantity) {
             res.writeHead(400, {"error": "No Books In Library"}, {'content-type': 'application/json'});
             res.end("No Books In Library");
@@ -191,10 +199,12 @@ router.post('/takeBook', function (req, res, next) {
                 takeOperationCode: now.getTime() + "T"
             }
 
-            book.readers.push(reader);
-            book.taken = book.taken + 1;
-
-            Book.update(book, function (error, book) {
+            Book.update({isbn: tempISBN}, {
+                $set: {
+                    taken: book.taken + 1
+                },
+                $push: {readers: reader}
+            }, function (error, book) {
                 if (error) return next(error);
 
                 res.send(book);
