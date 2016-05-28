@@ -33,11 +33,12 @@ router.post('/add', function (req, res, next) {
     tempBook.readers = [];
 
     if (quantity <= 0) {
-        res.writeHead(400, {
+        res.writeHead(400, {'content-type': 'application/json'});
+        res.write(JSON.stringify({
             "error": "Illegal Parameter",
             "message": "წიგნების რაოდენობა უნდა იყოს 0-ზე მეტი"
-        }, {'content-type': 'application/json'});
-        res.end({"message": "წიგნების რაოდენობა უნდა იყოს 0-ზე მეტი"});
+        }));
+        res.end();
         return;
     }
 
@@ -68,8 +69,10 @@ router.post('/add', function (req, res, next) {
                     room: tempRoom
                 }, function (err, books) {
                     if (books.length) {
-                        res.writeHead(400, {"error": "Place is not available"}, {'content-type': 'application/json'});
-                        res.end("Place Is Not Available");
+                        res.writeHead(400, {'content-type': 'application/json'});
+                        res.write(JSON.stringify({"error": "Place is not available"}));
+                        res.end();
+                        return;
                     } else {
                         Book.update(book, function (err) {
                             if (err) return next(err);
@@ -85,8 +88,10 @@ router.post('/add', function (req, res, next) {
                 room: tempRoom
             }, function (err, books) {
                 if (books.length) {
-                    res.writeHead(400, {"error": "Place is not available"}, {'content-type': 'application/json'});
-                    res.end({"message": "მითითებული ადგილი დაკავებულია!"});
+                    res.writeHead(400, {'content-type': 'application/json'});
+                    res.write(JSON.stringify({"error": "Place is not available"}));
+                    res.end();
+                    return;
                 } else {
                     tempBook.voteCount = 0;
                     tempBook.currRating = 0;
@@ -108,8 +113,10 @@ router.post('/remove', function (req, res, next) {
         isbn: tempISBN
     }, function (err, book) {
         if (book == null) {
-            res.writeHead(400, {"error": "Illegal Parameter"}, {'content-type': 'application/json'});
-            res.end({"message": "არასწორი პარამეტრი !"});
+            res.writeHead(400, {'content-type': 'application/json'});
+            res.write(JSON.stringify({"error": "Illegal Parameter"}));
+            res.end();
+            return;
         } else {
             Book.remove(book, function (err) {
                 if (err) return next(err);
@@ -127,11 +134,12 @@ router.post('/addRating', function (req, res, next) {
     var grade = req.body.grade;
 
     if (grade < 0 || grade > 10) {
-        res.writeHead(400, {
+        res.writeHead(400, {'content-type': 'application/json'});
+        res.write(JSON.stringify({
             "error": "Illegal Parameter",
             "message": "ქულა უნდა იყოს [0;10] შუალედში !"
-        }, {'content-type': 'application/json'});
-        res.end("ქულა უნდა იყოს [0;10] შუალედში !");
+        }));
+        res.end();
         return;
     } else {
         Book.findOne({
@@ -178,25 +186,30 @@ router.post('/takeBook', function (req, res, next) {
         if (err) return new Error("Error occurred");
 
         if (book == null) {
-            res.writeHead(400, {"error": "Illegal Parameter"}, {'content-type': 'application/json'});
-            res.end("ILLEGAL PARAMETER");
+            res.writeHead(400, {'content-type': 'application/json'});
+            res.write(JSON.stringify({
+                "error": "Illegal Parameter"
+            }));
+            res.end();
             return;
         }
 
 
         var now = new Date();
         if (book.taken == book.quantity) {
-            res.writeHead(400, {"error": "No Books In Library"}, {'content-type': 'application/json'});
-            res.end("No Books In Library");
+            res.writeHead(400, {'content-type': 'application/json'});
+            res.write(JSON.stringify({"error": "No Books In Library"}));
+            res.end();
             return;
         } else {
+            var t_o_code = now.getTime() + "T";
             var reader = {
                 name: tempName,
                 surname: tempSurname,
                 personalNo: tempPersonalNo,
                 mobile: tempMobile,
                 takeDate: now,
-                takeOperationCode: now.getTime() + "T"
+                takeOperationCode: t_o_code
             }
 
             Book.update({isbn: tempISBN}, {
@@ -207,7 +220,7 @@ router.post('/takeBook', function (req, res, next) {
             }, function (error, book) {
                 if (error) return next(error);
 
-                res.send(book);
+                res.send(t_o_code);
             });
         }
     })
@@ -225,8 +238,9 @@ router.post('/returnBook', function (req, res, next) {
         if (err) return new Error("Error occurred");
 
         if (book == null) {
-            res.writeHead(400, {"error": "Illegal Parameter"}, {'content-type': 'application/json'});
-            res.end("ILLEGAL PARAMETER");
+            res.writeHead(400, {'content-type': 'application/json'});
+            res.write(JSON.stringify({"error": "Illegal Parameter"}));
+            res.end();
             return;
         }
 
