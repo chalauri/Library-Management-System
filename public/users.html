@@ -60,6 +60,7 @@
             <th>გვარი</th>
             <th>პირადი ნომერი</th>
             <th>მომხმარებლის სახელი</th>
+            <th>პაროლი</th>
             <th></th>
         </tr>
         </thead>
@@ -102,6 +103,12 @@
                             <input type="text" id="username" class="form-control" placeholder="მომხმარებლის სახელი">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-3 control-label">პაროლი</label>
+                        <div class="col-sm-9">
+                            <input type="password" id="password" class="form-control" placeholder="პაროლი">
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -118,7 +125,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-    var fields = ["name", "surname", "personalNo", "username"];
+    var fields = ["name", "surname", "personalNo", "username", "password"];
     $(document).ready(function () {
         var table = document.getElementById('body');
         $.get("users/list", function (data) {
@@ -126,7 +133,11 @@
                 var row = document.createElement('tr');
                 for (var j in fields) {
                     var td = document.createElement('td');
-                    td.innerText = data[i][fields[j]] ? data[i][fields[j]] : "";
+                    if (fields[j] == "password") {
+                        td.innerText = "********"
+                    } else {
+                        td.innerText = data[i][fields[j]] ? data[i][fields[j]] : "";
+                    }
                     row.appendChild(td);
                 }
                 var td = document.createElement('td');
