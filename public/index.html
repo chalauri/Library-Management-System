@@ -7,7 +7,6 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
     <title>თსუ ბიბლიოთეკა</title>
 
@@ -15,6 +14,13 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
+
+    <link href="css/star-rating.css" media="all" rel="stylesheet" type="text/css"/>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/star-rating.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -52,6 +58,9 @@
 <div class="container">
     <button type="button" class="btn btn-primary btn" onclick="addBookModal()">
         დამატება
+    </button>
+    <button type="button" class="btn btn-primary btn" onclick="openReturnBook()">
+        დაბრუნება
     </button>
     <table id="grid-data" class="table table-bordered">
         <thead>
@@ -170,7 +179,7 @@
                     </div>
                     <div class="form-group">
                         <label for="room" class="col-sm-2 control-label">ტელეფონი</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-10 col-sm-offset-1">
                             <input type="text" id="tbmobile" class="form-control" placeholder="ტელეფონი">
                         </div>
                     </div>
@@ -184,11 +193,47 @@
     </div>
 </div>
 
+<div class="modal fade" id="returnBookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">გატანა</h4>
+            </div>
+            <div class="modal-body">
+                <form id="returnBook" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">ISBN</label>
+                        <div class="col-sm-10">
+                            <input disabled type="text" class="form-control" placeholder="ISBN">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="author" class="col-sm-2 control-label">კოდი</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="კოდი">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">შეფასება</label>
+                        <div class="col-sm-10">
+                            <input id="stars" type="text">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">გაუქმება</button>
+                <button type="button" class="btn btn-primary" onclick="takeBook()">გატანა</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
 <script>
     var fields = ["title", "author", "isbn", "year", "room", "shelf", "quantity", "taken"];
     $(document).ready(function () {
@@ -214,6 +259,21 @@
                 row.appendChild(td);
                 table.appendChild(row);
             }
+        });
+
+        $("#stars").rating({
+            min: 0, max: 10, step: 1, stars: 10, size: 'xs',
+            starCaptions: {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10'},
+            clearCaption: '0',
+            clearCaptionClass: 'label label-primary',
+            starCaptionClasses: {
+                1: 'label label-primary',
+                2: 'label label-primary',
+                3: 'label label-primary',
+                4: 'label label-primary',
+                5: 'label label-primary'
+            },
+            hoverChangeCaption: false
         });
     });
 
@@ -276,6 +336,10 @@
         document.getElementById("addForm").reset()
         document.getElementById("isbn").disabled = false
         $("#myModal").modal();
+    }
+
+    function openReturnBook() {
+        $("#returnBookModal").modal();
     }
 </script>
 </body>
