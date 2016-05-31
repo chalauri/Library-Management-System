@@ -276,7 +276,7 @@ router.post('/returnBook', function (req, res, next) {
             book.voteCount = book.voteCount + 1;
             book.currRating = sum / (book.voteCount);
 
-            Book.update(book, function (error, book) {
+            Book.insert(book, function (error, book) {
                 if (error) return next(error);
 
                 res.send(book);

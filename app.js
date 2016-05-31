@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Connection create
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://admin:963941@ds011442.mlab.com:11442/lms');
+mongoose.connect('mongodb://localhost/lms');
 
 // Import models
 require('./models/ModelsImporter');
